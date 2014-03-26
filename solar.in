@@ -1,0 +1,67 @@
+# H2O Bulk  
+
+#########################
+### 1. Initialization ###
+#########################
+
+units		lj  # A,fmsec,g/mol,Kcal/mol,K,atm
+boundary        m m m 
+atom_style      charge # molecular+charge
+pair_style      grav/cut 50  
+ 
+##########################
+### 2. Atom Definition ###
+##########################
+
+read_data     solar.data
+
+pair_coeff * * 50
+
+group 1 type 1
+group 2 type 2
+group 3 type 3
+group 4 type 4
+group 5 type 5
+group 6 type 6
+group 7 type 7
+group 8 type 8
+group 9 type 9
+
+group planets type > 1
+
+velocity 1 set 0 0 0 
+velocity 2 set 0 0 0.005 #1 
+velocity 3 set 0 0 0.005 #0.7315646543 
+velocity 4 set 0 0 0.005 #0.622101525  
+velocity 5 set 0 0 0.005 #0.5013578442 
+velocity 6 set 0 0 0.005 #0.2715688323 
+velocity 7 set 0 0 0.005 #0.1880091916 
+velocity 8 set 0 0 0.005 #0.125339461  
+velocity 9 set 0 0 0.005 #0.1044495509 
+
+
+###################
+### 3. Settings ###    
+###################
+
+ 
+timestep  1
+run_style verlet
+
+
+thermo_style custom step temp pe ke etotal press atoms 
+thermo   50
+
+
+fix 2 planets nve  
+
+#########################
+### 4. Run Simulation ###
+#########################
+
+dump vmd all atom 50 solar.lammpstrj
+
+run 200000
+
+
+
